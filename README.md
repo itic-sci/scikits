@@ -12,7 +12,7 @@ git add * git commit -m "第一次提交" git push
 - 上传成功后，还需发布代码。进入GitHub仓库，点击release发布，版本号采用v0.0.0形式
 
 - 发布成功后，测试代码能够被他人使用
-go get github.com/gl1n/gowave
+go get github.com/itic-sci/scikits
 
 - 需要在Goland中勾选Settings>Go>Go Modules的Enable Go modules integration以正确识别外部导入的包
 
