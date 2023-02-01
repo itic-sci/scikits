@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/xulehexuwei/scikits"
+	"github.com/itic-sci/scikits"
 	"reflect"
 )
 

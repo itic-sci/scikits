@@ -4,7 +4,7 @@
 git clone https://github.com/gl1n/gowave.git
 
 - 进入项目文件夹，初始化go mod
-go mod init github.com/xulehexuwei/scikits
+go mod init github.com/itic-sci/scikits
 
 - 在项目文件夹中编写代码(可以添加子文件夹)，然后push到github
 git add * git commit -m "第一次提交" git push

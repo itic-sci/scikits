@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/golang-jwt/jwt"
-	"github.com/xulehexuwei/scikits"
+	"github.com/itic-sci/scikits"
 	"time"
 )
 

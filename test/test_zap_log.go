@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/xulehexuwei/scikits"
+	"github.com/itic-sci/scikits"
 	"go.uber.org/zap"
 )
 

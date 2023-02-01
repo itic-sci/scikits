@@ -1,4 +1,4 @@
-module github.com/xulehexuwei/scikits
+module github.com/itic-sci/scikits
 
 go 1.18
 

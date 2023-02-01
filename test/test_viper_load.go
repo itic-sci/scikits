@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/xulehexuwei/scikits"
+	"github.com/itic-sci/scikits"
 )
 
 // yaml 直接生成结构体的在线工具 https://www.printlove.cn/tools/yaml2go
