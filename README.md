@@ -29,4 +29,6 @@ go get github.com/gl1n/gowave
 
 # github 账号密码
 
+https://github.com/itic-sci/scikits/
+
 itic-sci / Xuwei@2022
