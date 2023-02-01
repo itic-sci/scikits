@@ -9,10 +9,26 @@ import (
 	"time"
 )
 
-func NewEsClient(label string) (*es.Client, error) {
-	url := MyViper.GetString(fmt.Sprintf("%s.host", label))
-	user := MyViper.GetString(fmt.Sprintf("%s.user", label))
-	pass := MyViper.GetString(fmt.Sprintf("%s.pass", label))
+type EsClient struct {
+	Label  string // label是settings.ini中es的连接配置的标签
+	client *es.Client
+}
+
+func NewEsClient(label string) *EsClient {
+	r := &EsClient{}
+	r.Label = label
+	return r
+}
+
+func (e *EsClient) GetClient() *es.Client {
+	return e.client
+
+}
+
+func (e *EsClient) Init() error {
+	url := MyViper.GetString(fmt.Sprintf("%s.host", e.Label))
+	user := MyViper.GetString(fmt.Sprintf("%s.user", e.Label))
+	pass := MyViper.GetString(fmt.Sprintf("%s.pass", e.Label))
 	// 创建Client, 连接ES
 	client, err := es.NewClient(
 		// Go无法连接docker中es，代码设置sniff 为false
@@ -32,27 +48,24 @@ func NewEsClient(label string) (*es.Client, error) {
 		// 设置info日志输出
 		es.SetInfoLog(log.New(os.Stdout, "", log.LstdFlags)))
 
-	return client, err
+	e.client = client
+	return err
 }
 
-func EsQueryByMatch(label, index, column, text string) *es.SearchResult {
-	// label是settings.ini中es的连接配置的标签
+func (e *EsClient) QueryByMatch(index, column, text string) *es.SearchResult {
 	// column是es中要查询的字段名称， text是输入的检索内容
-	client, error := NewEsClient(label)
-	fmt.Println(error)
 	// 执行ES请求需要提供一个上下文对象
 	ctx := context.Background()
-
 	matchQuery := es.NewMatchQuery(column, text)
 
-	searchResult, _ := client.Search().
-		Index(index).      // 设置索引名
+	searchResult, _ := e.client.Search().
+		Index(index). // 设置索引名
 		Query(matchQuery). // 设置查询条件
 		//Sort("Created", true). // 设置排序字段，根据Created字段升序排序，第二个参数false表示逆序
-		From(0).      // 设置分页参数 - 起始偏移量，从第0行记录开始
-		Size(40).     // 设置分页参数 - 每页大小
+		From(0). // 设置分页参数 - 起始偏移量，从第0行记录开始
+		Size(40). // 设置分页参数 - 每页大小
 		Pretty(true). // 查询结果返回可读性较好的JSON格式
-		Do(ctx)       // 执行请求
+		Do(ctx) // 执行请求
 
 	return searchResult
 }

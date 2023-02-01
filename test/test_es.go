@@ -15,11 +15,17 @@ type Employee struct {
 	Interests []string `json:"interests"`
 }
 
-func create() {
-	client, err := scikits.NewEsClient("es")
+var esClient = scikits.NewEsClient("es")
+
+func init() {
+	err := esClient.Init()
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func create() {
+	client := esClient.GetClient()
 
 	//使用结构体
 	e1 := Employee{"Jane", "Smith", 32, "I like to collect rock albums", []string{"music"}}
@@ -61,7 +67,7 @@ func create() {
 }
 
 func matchQuery() {
-	searchResult := scikits.EsQueryByMatch("es", "megacorp", "first_name", "Douglas")
+	searchResult := esClient.QueryByMatch("megacorp", "first_name", "Douglas")
 	querySet := make([]Employee, 0)
 	if searchResult.TotalHits() > 0 {
 		// 查询结果不为空，则遍历结果

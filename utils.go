@@ -6,6 +6,9 @@ import (
 	"unsafe"
 )
 
+/*
+得到指定长度的随机字符串
+*/
 const (
 	letterBytes   = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	letterIdxMask = 1<<6 - 1 // All 1-bits, as many as 6
