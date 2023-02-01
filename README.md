@@ -26,3 +26,7 @@ go get github.com/gl1n/gowave
 - viper
 - zap_logger
 - randomStr 得到指定长度的随机字符串
+
+# github 账号密码
+
+itic-sci / Xuwei@2022
