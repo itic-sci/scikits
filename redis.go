@@ -8,12 +8,16 @@ import (
 
 type RedisClient struct {
 	DB     int
-	Client *redis.Client
+	client *redis.Client
 }
 
-func (rClient *RedisClient) initClient() {
+func (r *RedisClient) GetClient() *redis.Client {
+	return r.client
+}
+
+func (r *RedisClient) Init() {
 	label := "redis"
-	db := rClient.DB
+	db := r.DB
 	host := MyViper.GetString(fmt.Sprintf("%s.host", label))
 	port := MyViper.GetString(fmt.Sprintf("%s.port", label))
 	password := MyViper.GetString(fmt.Sprintf("%s.pass", label))
@@ -23,37 +27,29 @@ func (rClient *RedisClient) initClient() {
 		Password: password,          // no password set
 		DB:       db,                // use default DB
 	})
-	rClient.Client = rdb
+	r.client = rdb
 }
 
-func (rClient *RedisClient) RedisSet(key string, value interface{}, expiration time.Duration) *redis.StatusCmd {
-	rClient.initClient()
-	rdb := rClient.Client
-	defer rdb.Close()
+func (r *RedisClient) Set(key string, value interface{}, expiration time.Duration) *redis.StatusCmd {
+	rdb := r.client
 	cmd := rdb.Set(key, value, expiration)
 	return cmd
 }
 
-func (rClient *RedisClient) RedisGet(key string) string {
-	rClient.initClient()
-	rdb := rClient.Client
-	defer rdb.Close()
+func (r *RedisClient) Get(key string) string {
+	rdb := r.client
 	res := rdb.Get(key)
 	val := res.Val()
 	return val
 }
 
-func (rClient *RedisClient) RedisDelKey(key string) *redis.IntCmd {
-	rClient.initClient()
-	rdb := rClient.Client
-	defer rdb.Close()
+func (r *RedisClient) Key(key string) *redis.IntCmd {
+	rdb := r.client
 	cmd := rdb.Del(key)
 	return cmd
 }
 
-func (rClient *RedisClient) RedisRefreshKeyExpire(key string, expiration time.Duration) {
-	rClient.initClient()
-	rdb := rClient.Client
-	defer rdb.Close()
+func (r *RedisClient) RefreshKeyExpire(key string, expiration time.Duration) {
+	rdb := r.client
 	rdb.Expire(key, expiration)
 }
