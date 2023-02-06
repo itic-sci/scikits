@@ -1,6 +1,8 @@
 package scikits
 
 import (
+	"crypto/md5"
+	"fmt"
 	"math/rand"
 	"time"
 	"unsafe"
@@ -29,4 +31,10 @@ func GetRandString(n int) string {
 		remain--
 	}
 	return *(*string)(unsafe.Pointer(&b))
+}
+
+func GetMd5(text string) string {
+	has := md5.Sum([]byte(text))
+	sign := fmt.Sprintf("%x", has) //将[]byte转成16进制
+	return sign
 }
