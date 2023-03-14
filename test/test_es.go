@@ -67,7 +67,7 @@ func create() {
 }
 
 func matchQuery() {
-	searchResult := esClient.QueryByMatch("megacorp", "first_name", "Douglas")
+	searchResult := esClient.QueryByMatch("megacorp", "first_name", "Douglas", 10)
 	querySet := make([]Employee, 0)
 	if searchResult.TotalHits() > 0 {
 		// 查询结果不为空，则遍历结果
