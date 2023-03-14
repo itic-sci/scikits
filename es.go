@@ -90,3 +90,23 @@ func (e *EsClient) Query(index string, size int, selfDefineQuery es.Query) *es.S
 
 	return searchResult
 }
+
+/*
+import es "github.com/olivere/elastic/v7"
+boolQuery := es.NewBoolQuery()
+*/
+func (e *EsClient) QueryByBool(index string, size int, selfDefineQuery *es.BoolQuery) *es.SearchResult {
+	// column是es中要查询的字段名称， text是输入的检索内容
+	// 执行ES请求需要提供一个上下文对象
+	ctx := context.Background()
+	searchResult, _ := e.client.Search().
+		Index(index).           // 设置索引名
+		Query(selfDefineQuery). // 设置查询条件
+		//Sort("Created", true). // 设置排序字段，根据Created字段升序排序，第二个参数false表示逆序
+		From(0).      // 设置分页参数 - 起始偏移量，从第0行记录开始
+		Size(size).   // 设置分页参数 - 每页大小
+		Pretty(true). // 查询结果返回可读性较好的JSON格式
+		Do(ctx)       // 执行请求
+
+	return searchResult
+}
