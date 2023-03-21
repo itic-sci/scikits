@@ -45,13 +45,15 @@ func NewRedisClient(label string, db, poolNum int) *RedisClient {
 		MaxConnAge:         0 * time.Second,  //连接存活时长，从创建开始计时，超过指定时长则关闭连接，默认为0，即不关闭存活时长较长的连接
 
 		//命令执行失败时的重试策略
-		MaxRetries:      1,                      // 命令执行失败时，最多重试多少次，默认为0即不重试
+		MaxRetries:      2,                      // 命令执行失败时，最多重试多少次，默认为0即不重试
 		MinRetryBackoff: 8 * time.Millisecond,   //每次计算重试间隔时间的下限，默认8毫秒，-1表示取消间隔
 		MaxRetryBackoff: 512 * time.Millisecond, //每次计算重试间隔时间的上限，默认512毫秒，-1表示取消间隔
 
 		//钩子函数
-		OnConnect: func(conn *redis.Conn) error { //仅当客户端执行命令时需要从连接池获取连接时，如果连接池需要新建连接时则会调用此钩子函数
-			fmt.Printf("conn=%v\n", conn)
+		OnConnect: func(conn *redis.Conn) error { // 当客户端执行命令需要从连接池获取连接时，且连接池需要新建连接时则会调用此钩子函数
+			s := fmt.Sprintf("NewRedisClient conn=%v\n", conn)
+			fmt.Println(s)
+			SugarLogger.Info(s)
 			return nil
 		},
 	})

@@ -3,19 +3,21 @@ package main
 import (
 	"fmt"
 	"github.com/itic-sci/scikits"
+	"time"
 )
 
+func redisTest(redisClient *scikits.RedisClient) {
+	redisClient.PrintRedisPool()
+	r := redisClient.Incr("test_xw_4")
+	fmt.Println("num: ", r)
+
+}
+
 func main() {
-	redisClient := scikits.NewRedisClient("redis", 10, 5)
+	redisClient := scikits.NewRedisClient("redis", 10, 10)
+	for i := 0; i < 100; i++ {
+		go redisTest(redisClient)
+	}
 
-	redisClient.PrintRedisPool()
-	r := redisClient.Set("test_xw", "123", 0)
-	fmt.Println(r.Err())
-
-	redisClient.Close()
-
-	redisClient.PrintRedisPool()
-
-	r = redisClient.Set("test_xw", "345", 0)
-	fmt.Println(r.Err()) // redis: client is closed
+	time.Sleep(time.Second * 300)
 }

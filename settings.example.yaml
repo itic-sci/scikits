@@ -1,0 +1,30 @@
+
+mysql:
+  host: 192.18.0.3
+  port: 3307
+  user: xxx
+  password: xxx
+  db: xxx
+
+mongo:
+  host: 192.18.0.3
+  port: 27017
+  db: xxx
+  user: xxx
+  password: xxxx
+
+redis:
+  host: 192.16.0.3
+  port: xxx
+  pass: xxx
+
+minio:
+  endpoint: 192.8.0.1:9000
+  domainProxy: xxx.com
+  accessKeyID: xxx
+  secretAccessKey: xxx
+  useSSL: false
+  bucketName: xxx
+
+logs:
+  filepath: ./logs/test.log
