@@ -8,7 +8,7 @@ import (
 
 func redisTest(redisClient *scikits.RedisClient) {
 	redisClient.PrintRedisPool()
-	r := redisClient.Incr("test_xw_4")
+	r := redisClient.Incr("test_xw_5")
 	fmt.Println("num: ", r)
 
 }
