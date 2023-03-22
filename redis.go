@@ -79,6 +79,36 @@ func (rClient *RedisClient) DelKey(key string) *redis.IntCmd {
 	return cmd
 }
 
+func (rClient *RedisClient) ZAdd(key string, members ...redis.Z) *redis.IntCmd {
+	rdb := rClient.Client
+	cmd := rdb.ZAdd(rClient.Ctx, key, members...)
+	return cmd
+}
+
+func (rClient *RedisClient) ZRem(key string, members ...interface{}) *redis.IntCmd {
+	rdb := rClient.Client
+	cmd := rdb.ZRem(rClient.Ctx, key, members...)
+	return cmd
+}
+
+func (rClient *RedisClient) ZRevRange(key string, start, stop int64) *redis.StringSliceCmd {
+	rdb := rClient.Client
+	cmd := rdb.ZRevRange(rClient.Ctx, key, start, stop)
+	return cmd
+}
+
+func (rClient *RedisClient) ZPopMin(key string, count ...int64) *redis.ZSliceCmd {
+	rdb := rClient.Client
+	cmd := rdb.ZPopMin(rClient.Ctx, key, count...)
+	return cmd
+}
+
+func (rClient *RedisClient) ZCard(key string) *redis.IntCmd {
+	rdb := rClient.Client
+	cmd := rdb.ZCard(rClient.Ctx, key)
+	return cmd
+}
+
 func (rClient *RedisClient) RefreshKeyExpire(key string, expiration time.Duration) {
 	rdb := rClient.Client
 	rdb.Expire(rClient.Ctx, key, expiration)
