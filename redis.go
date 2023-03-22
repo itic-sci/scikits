@@ -7,6 +7,13 @@ import (
 	"time"
 )
 
+func handleError(err error) {
+	if err != nil {
+		fmt.Println(err)
+		SugarLogger.Error(err)
+	}
+}
+
 type RedisClient struct {
 	Client  *redis.Client
 	Ctx     context.Context
@@ -68,9 +75,64 @@ func (rClient *RedisClient) Set(key string, value interface{}, expiration time.D
 
 func (rClient *RedisClient) Get(key string) string {
 	rdb := rClient.Client
-	res := rdb.Get(rClient.Ctx, key)
-	val := res.Val()
-	return val
+	cmd := rdb.Get(rClient.Ctx, key)
+	handleError(cmd.Err())
+	return cmd.Val()
+}
+
+func (rClient *RedisClient) HSet(key string, values ...interface{}) *redis.IntCmd {
+	rdb := rClient.Client
+	cmd := rdb.HSet(rClient.Ctx, key, values...)
+	return cmd
+}
+
+func (rClient *RedisClient) HGet(key string, field string) string {
+	rdb := rClient.Client
+	cmd := rdb.HGet(rClient.Ctx, key, field)
+	handleError(cmd.Err())
+	return cmd.Val()
+}
+
+// list类型 添加左边元素
+func (rClient *RedisClient) LPush(key string, values ...interface{}) *redis.IntCmd {
+	rdb := rClient.Client
+	cmd := rdb.LPush(rClient.Ctx, key, values...)
+	return cmd
+}
+
+// list类型 添加右边元素
+func (rClient *RedisClient) RPush(key string, values ...interface{}) *redis.IntCmd {
+	rdb := rClient.Client
+	cmd := rdb.RPush(rClient.Ctx, key, values...)
+	return cmd
+}
+
+// list类型 删除左边第一个元素
+func (rClient *RedisClient) LPop(key string) *redis.StringCmd {
+	rdb := rClient.Client
+	cmd := rdb.LPop(rClient.Ctx, key)
+	return cmd
+}
+
+// list类型 删除右边第一个元素
+func (rClient *RedisClient) RPop(key string) *redis.StringCmd {
+	rdb := rClient.Client
+	cmd := rdb.RPop(rClient.Ctx, key)
+	return cmd
+}
+
+// list类型 删除 第几位到第几位元素
+func (rClient *RedisClient) LTrim(key string, start, stop int64) *redis.StatusCmd {
+	rdb := rClient.Client
+	cmd := rdb.LTrim(rClient.Ctx, key, start, stop)
+	return cmd
+}
+
+// list类型  获取 第几位到第几位元素
+func (rClient *RedisClient) LRange(key string, start, stop int64) *redis.StringSliceCmd {
+	rdb := rClient.Client
+	cmd := rdb.LRange(rClient.Ctx, key, start, stop)
+	return cmd
 }
 
 func (rClient *RedisClient) DelKey(key string) *redis.IntCmd {
@@ -109,38 +171,46 @@ func (rClient *RedisClient) ZCard(key string) *redis.IntCmd {
 	return cmd
 }
 
-func (rClient *RedisClient) RefreshKeyExpire(key string, expiration time.Duration) {
-	rdb := rClient.Client
-	rdb.Expire(rClient.Ctx, key, expiration)
-}
-
 // key 每次 自增1
 func (rClient *RedisClient) Incr(key string) int64 {
 	rdb := rClient.Client
-	res := rdb.Incr(rClient.Ctx, key)
-	val := res.Val()
-	return val
+	cmd := rdb.Incr(rClient.Ctx, key)
+	handleError(cmd.Err())
+	return cmd.Val()
 }
 
 // key 每次 按指定数自增
 func (rClient *RedisClient) IncrBy(key string, num int64) int64 {
 	rdb := rClient.Client
-	res := rdb.IncrBy(rClient.Ctx, key, num)
-	val := res.Val()
-	return val
+	cmd := rdb.IncrBy(rClient.Ctx, key, num)
+	handleError(cmd.Err())
+	return cmd.Val()
 }
 
 // key 每次 减1
 func (rClient *RedisClient) Decr(key string) int64 {
 	rdb := rClient.Client
-	res := rdb.Decr(rClient.Ctx, key)
-	val := res.Val()
-	return val
+	cmd := rdb.Decr(rClient.Ctx, key)
+	handleError(cmd.Err())
+	return cmd.Val()
+}
+
+// key 每次 按指定数自减
+func (rClient *RedisClient) DecrBy(key string, num int64) int64 {
+	rdb := rClient.Client
+	cmd := rdb.DecrBy(rClient.Ctx, key, num)
+	handleError(cmd.Err())
+	return cmd.Val()
+}
+
+func (rClient *RedisClient) RefreshKeyExpire(key string, expiration time.Duration) *redis.BoolCmd {
+	rdb := rClient.Client
+	return rdb.Expire(rClient.Ctx, key, expiration)
 }
 
 func (rClient *RedisClient) Close() {
 	rdb := rClient.Client
-	rdb.Close()
+	handleError(rdb.Close())
 }
 
 func (rClient *RedisClient) PrintRedisPool() {

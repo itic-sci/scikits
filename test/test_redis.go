@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/itic-sci/scikits"
-	"time"
+	"github.com/redis/go-redis/v9"
 )
 
 func redisTest(redisClient *scikits.RedisClient) {
@@ -14,10 +14,21 @@ func redisTest(redisClient *scikits.RedisClient) {
 }
 
 func main() {
-	redisClient := scikits.NewRedisClient("redis", 10, 10)
-	for i := 0; i < 100; i++ {
-		go redisTest(redisClient)
-	}
+	redisClient := scikits.NewRedisClient("redis", 10, 1)
 
-	time.Sleep(time.Second * 300)
+	//for i := 0; i < 100; i++ {
+	//	go redisTest(redisClient)
+	//}
+	//
+	//time.Sleep(time.Second * 300)
+
+	//redisClient.LPush("xwtestlpush", []string{"1", "2", "3", "4", "5", "6", "7", "8", "9"})
+	//redisClient.RPush("xwtestlpush", []string{"right"})
+	//cmd := redisClient.LRange("xwtestlpush", 0, 11)
+	//fmt.Println(cmd.Val())
+
+	redisClient.ZAdd("test_ZAdd", redis.Z{Score: 1, Member: "1"}, redis.Z{Score: 2, Member: "3"})
+
+	cmd := redisClient.ZRevRange("test_ZAdd", 0, 1)
+	fmt.Println(cmd.Val())
 }
