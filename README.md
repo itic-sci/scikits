@@ -21,14 +21,12 @@ go get github.com/itic-sci/scikits
 
 - jwt
 - minio
+- mongo
+- mysql
+- redis
 - gin response
 - time_fun
+- utils
 - viper
 - zap_logger
 - randomStr 得到指定长度的随机字符串
-
-# github 账号密码
-
-https://github.com/itic-sci/scikits/
-
-itic-sci / Xuwei@2022
