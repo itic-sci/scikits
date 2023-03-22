@@ -7,13 +7,6 @@ import (
 	"time"
 )
 
-func handleError(err error) {
-	if err != nil {
-		fmt.Println(err)
-		SugarLogger.Error(err)
-	}
-}
-
 type RedisClient struct {
 	Client  *redis.Client
 	Ctx     context.Context
@@ -76,7 +69,12 @@ func (rClient *RedisClient) Set(key string, value interface{}, expiration time.D
 func (rClient *RedisClient) Get(key string) string {
 	rdb := rClient.Client
 	cmd := rdb.Get(rClient.Ctx, key)
-	handleError(cmd.Err())
+
+	if err := cmd.Err(); err != nil {
+		fmt.Println(err)
+		SugarLogger.Error(err)
+	}
+
 	return cmd.Val()
 }
 
@@ -89,7 +87,12 @@ func (rClient *RedisClient) HSet(key string, values ...interface{}) *redis.IntCm
 func (rClient *RedisClient) HGet(key string, field string) string {
 	rdb := rClient.Client
 	cmd := rdb.HGet(rClient.Ctx, key, field)
-	handleError(cmd.Err())
+
+	if err := cmd.Err(); err != nil {
+		fmt.Println(err)
+		SugarLogger.Error(err)
+	}
+
 	return cmd.Val()
 }
 
@@ -175,7 +178,12 @@ func (rClient *RedisClient) ZCard(key string) *redis.IntCmd {
 func (rClient *RedisClient) Incr(key string) int64 {
 	rdb := rClient.Client
 	cmd := rdb.Incr(rClient.Ctx, key)
-	handleError(cmd.Err())
+
+	if err := cmd.Err(); err != nil {
+		fmt.Println(err)
+		SugarLogger.Error(err)
+	}
+
 	return cmd.Val()
 }
 
@@ -183,7 +191,12 @@ func (rClient *RedisClient) Incr(key string) int64 {
 func (rClient *RedisClient) IncrBy(key string, num int64) int64 {
 	rdb := rClient.Client
 	cmd := rdb.IncrBy(rClient.Ctx, key, num)
-	handleError(cmd.Err())
+
+	if err := cmd.Err(); err != nil {
+		fmt.Println(err)
+		SugarLogger.Error(err)
+	}
+
 	return cmd.Val()
 }
 
@@ -191,7 +204,12 @@ func (rClient *RedisClient) IncrBy(key string, num int64) int64 {
 func (rClient *RedisClient) Decr(key string) int64 {
 	rdb := rClient.Client
 	cmd := rdb.Decr(rClient.Ctx, key)
-	handleError(cmd.Err())
+
+	if err := cmd.Err(); err != nil {
+		fmt.Println(err)
+		SugarLogger.Error(err)
+	}
+
 	return cmd.Val()
 }
 
@@ -199,7 +217,12 @@ func (rClient *RedisClient) Decr(key string) int64 {
 func (rClient *RedisClient) DecrBy(key string, num int64) int64 {
 	rdb := rClient.Client
 	cmd := rdb.DecrBy(rClient.Ctx, key, num)
-	handleError(cmd.Err())
+
+	if err := cmd.Err(); err != nil {
+		fmt.Println(err)
+		SugarLogger.Error(err)
+	}
+
 	return cmd.Val()
 }
 
@@ -210,7 +233,7 @@ func (rClient *RedisClient) RefreshKeyExpire(key string, expiration time.Duratio
 
 func (rClient *RedisClient) Close() {
 	rdb := rClient.Client
-	handleError(rdb.Close())
+	rdb.Close()
 }
 
 func (rClient *RedisClient) PrintRedisPool() {
