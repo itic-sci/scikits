@@ -1,16 +1,19 @@
 package scikits
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 const (
-	CodeSystemErr       = -1 // 系统错误，需要修复bug
-	CodeOK              = 0  // 成功
-	CodeShowErr         = 2  // 前端需要弹窗展示的错误
-	CodeLoginExpired    = 10 // 登录过期
-	CodePermissionError = 20 // 没有权限
+	CodeSystemErr        = -1  // 系统错误，需要修复bug
+	CodeOK               = 0   // 成功
+	CodeShowErr          = 2   // 前端需要弹窗展示的错误
+	CodeLoginExpired     = 10  // 登录过期
+	CodePermissionError  = 20  // 没有权限
+	CodeJumpBoundLibrary = 23  // 跳转绑定图书馆用户页面
+	CodeRedirectSciBrain = 301 // 重新定向页面
 )
 
 type ResponseFormat struct {
@@ -23,10 +26,6 @@ var codeMap = map[int]ResponseFormat{
 	CodeOK: ResponseFormat{
 		Code:    CodeOK,
 		Message: "OK",
-	},
-	CodeShowErr: ResponseFormat{
-		Code:    CodeShowErr,
-		Message: "Pop hint", // 弹窗提示语
 	},
 	CodeSystemErr: ResponseFormat{
 		Code:    CodeSystemErr,
@@ -63,11 +62,15 @@ func RespondError(c *gin.Context, code int, errMsgArr ...string) {
 	c.JSON(http.StatusOK, r)
 }
 
-func RespondData(c *gin.Context, data interface{}) {
+func RespondFormatData(c *gin.Context, data interface{}) {
 	r := ResponseFormat{
 		Code:    CodeOK,
 		Message: "Ok",
 		Data:    data,
 	}
 	c.JSON(http.StatusOK, r)
+}
+
+func RespondData(c *gin.Context, data interface{}) {
+	c.JSON(http.StatusOK, data)
 }
