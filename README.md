@@ -30,3 +30,22 @@ go get github.com/itic-sci/scikits
 - viper
 - zap_logger
 - randomStr 得到指定长度的随机字符串
+
+# zap 日志使用
+
+- zap 可以写文件也可以写graylog udp接口，当配置文件.yaml中配置了`graylog-udp`参数时，日志写入graylog中，没配置的话写入file文件`xxx.log`;
+- yaml 文件配置如下
+
+```yaml
+project:
+  name: gateway
+  version: 0.0.1
+
+graylog-udp:
+  host: 192.168.0.1
+  port: 12201
+```
+
+写入graylog_es中的数据结构如下：
+
+![img](./doc/img/graylog_es.png)
