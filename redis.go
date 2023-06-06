@@ -51,7 +51,6 @@ func NewRedisClient(label string, db, poolNum int) *RedisClient {
 		OnConnect: func(ctx context.Context, conn *redis.Conn) error { // 当客户端执行命令需要从连接池获取连接时，且连接池需要新建连接时则会调用此钩子函数
 			s := fmt.Sprintf("NewRedisClient conn=%v\n", conn)
 			fmt.Println(s)
-			SugarLogger.Info(s)
 			return nil
 		},
 	})
@@ -72,7 +71,6 @@ func (rClient *RedisClient) Get(key string) string {
 
 	if err := cmd.Err(); err != nil {
 		fmt.Println(err)
-		SugarLogger.Error(err)
 	}
 
 	return cmd.Val()
@@ -90,7 +88,6 @@ func (rClient *RedisClient) HGet(key string, field string) string {
 
 	if err := cmd.Err(); err != nil {
 		fmt.Println(err)
-		SugarLogger.Error(err)
 	}
 
 	return cmd.Val()
@@ -181,7 +178,6 @@ func (rClient *RedisClient) Incr(key string) int64 {
 
 	if err := cmd.Err(); err != nil {
 		fmt.Println(err)
-		SugarLogger.Error(err)
 	}
 
 	return cmd.Val()
@@ -194,7 +190,6 @@ func (rClient *RedisClient) IncrBy(key string, num int64) int64 {
 
 	if err := cmd.Err(); err != nil {
 		fmt.Println(err)
-		SugarLogger.Error(err)
 	}
 
 	return cmd.Val()
@@ -207,7 +202,6 @@ func (rClient *RedisClient) Decr(key string) int64 {
 
 	if err := cmd.Err(); err != nil {
 		fmt.Println(err)
-		SugarLogger.Error(err)
 	}
 
 	return cmd.Val()
@@ -220,7 +214,6 @@ func (rClient *RedisClient) DecrBy(key string, num int64) int64 {
 
 	if err := cmd.Err(); err != nil {
 		fmt.Println(err)
-		SugarLogger.Error(err)
 	}
 
 	return cmd.Val()
