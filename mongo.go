@@ -32,6 +32,10 @@ func (m *MongoClient) Init() {
 	// [mongodb://][user:pass@]host1[:port1][,host2[:port2],...][/database][?options]
 	mongoURI := fmt.Sprintf("mongodb://%s:%s@%s:%v/%s", user, pw, host, port, db)
 	clientOptions := options.Client().ApplyURI(mongoURI)
+
+	// 设置最大连接数 -默认100， 不设置最大是64
+	clientOptions.SetMaxPoolSize(50)
+
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		log.Fatal(err)
