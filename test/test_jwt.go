@@ -24,25 +24,28 @@ func test() {
 }
 
 func main() {
-	test()
+	//test()
 
 	//time.Sleep(time.Second * time.Duration(2))
+
+	//scikits.SetSignature("self-define")
 	//
-	scikits.SetSignature("self-define")
+	//body := jwt.MapClaims{
+	//	"user": "username",
+	//	"iat":  time.Now().Hour(),
+	//}
+	//
+	//fmt.Println(body)
+	//
+	//expTime := time.Second * time.Duration(1)
+	//
+	//ts := scikits.JwtEncrypt(body, expTime)
+	//fmt.Println(ts)
+	//
 
-	body := jwt.MapClaims{
-		"user": "username",
-		"iat":  time.Now().Hour(),
-	}
-
-	expTime := time.Second * time.Duration(1)
-
-	ts := scikits.JwtEncrypt(body, expTime)
-	//time.Sleep(time.Second * time.Duration(3))
-
-	scikits.SetSignature("self-defined")
-
-	claims, err := scikits.JwtDecrypt(ts)
+	scikits.SetSignature("wqeqe123123")
+	tss := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTExNDEyNjYsImV4cCI6MTY5MTE0MTQ2Nn0.gmgHNAodSch25Hp256Pez_miFq0sZop1QqB3k5Stt4"
+	claims, err := scikits.JwtDecrypt(tss)
 
 	fmt.Println(claims, err)
 }

@@ -35,6 +35,10 @@ func (m *MyMinIo) initClient(label string) {
 	m.minioClient = client
 }
 
+func (m *MyMinIo) GetMinioClient() *minio.Client {
+	return m.minioClient
+}
+
 func (m *MyMinIo) CreateBucket(bucketName string) {
 	// bucketName 创建存储桶的名称
 
