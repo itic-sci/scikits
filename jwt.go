@@ -25,7 +25,9 @@ func JwtEncrypt(jwtBody jwt.MapClaims, expTime time.Duration) string {
 	// Sign and get the complete encoded token as a string using the secret
 	//fmt.Println(signature)
 	tokenString, err := token.SignedString([]byte(signature))
-	fmt.Println(tokenString, err)
+	if err != nil {
+		fmt.Println(err)
+	}
 	return tokenString
 }
 
