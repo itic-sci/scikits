@@ -6,6 +6,6 @@ import (
 
 func main() {
 	defer scikits.SugarLogger.Sync()
-	scikits.SugarLogger.Error("555 这是一个info 测试")
+	scikits.SugarLogger.Info("udp info 测试")
 	//scikits.SugarLogger.Error("1231231231312 徐威 error message")
 }

@@ -26,8 +26,8 @@ var (
 
 func init() {
 	var core zapcore.Core
-	if MyViper.GetString("graylog-udp.host") != "" {
-		core = writeGraylogCore(MyViper.GetString("graylog-udp.host"), MyViper.GetInt("graylog-udp.port"))
+	if MyViper.GetString("graylog.host") != "" {
+		core = writeGraylogCore(MyViper.GetString("graylog.host"), MyViper.GetInt("graylog.port"))
 	} else {
 		core = writeFileCore()
 	}

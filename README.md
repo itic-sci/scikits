@@ -33,7 +33,7 @@ go get github.com/itic-sci/scikits
 
 # zap 日志使用
 
-- zap 可以写文件也可以写graylog udp接口，当配置文件.yaml中配置了`graylog-udp`参数时，日志写入graylog中，没配置的话写入file文件`xxx.log`;
+- zap 可以写文件也可以写graylog udp接口，当配置文件.yaml中配置了`graylog`参数时（支持gelf tcp和udp），日志写入graylog中，没配置的话写入file文件`xxx.log`;
 - yaml 文件配置如下
 
 ```yaml
@@ -41,7 +41,8 @@ project:
   name: gateway
   version: 0.0.1
 
-graylog-udp:
+graylog:
+  gelf: udp
   host: 192.168.0.1
   port: 12201
 ```

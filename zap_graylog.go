@@ -73,6 +73,7 @@ func getEncoder() zapcore.Encoder {
 	return jsonEncode
 }
 
+// GELF UDP 或 HTTP
 func writeGraylogCore(host string, port int) zapcore.Core {
 	allLevels := zap.LevelEnablerFunc(func(l zapcore.Level) bool { return true })
 	syncer := New(NewDefaultConfig(host, port))
@@ -182,6 +183,16 @@ func (g *gelf) compress(b []byte) (bytes.Buffer, error) {
 }
 
 func (g *gelf) send(b []byte) (int, error) {
+	gelfType := MyViper.GetString("graylog.gelf")
+	if gelfType == "tcp" {
+		return g.sendByTcp(b)
+	} else {
+		return g.sendByUdp(b)
+	}
+
+}
+
+func (g *gelf) sendByUdp(b []byte) (int, error) {
 	var addr = g.Config.GraylogHostname + ":" + strconv.Itoa(g.Config.GraylogPort)
 	udpAddr, err := net.ResolveUDPAddr("udp", addr)
 	if err != nil {
@@ -189,6 +200,21 @@ func (g *gelf) send(b []byte) (int, error) {
 		return 0, err
 	}
 	conn, err := net.DialUDP("udp", nil, udpAddr)
+	if err != nil {
+		log.Printf("Uh oh! %s", err)
+		return 0, err
+	}
+	return conn.Write(b)
+}
+
+func (g *gelf) sendByTcp(b []byte) (int, error) {
+	var addr = g.Config.GraylogHostname + ":" + strconv.Itoa(g.Config.GraylogPort)
+	udpAddr, err := net.ResolveTCPAddr("tcp", addr)
+	if err != nil {
+		log.Printf("Uh oh! %s", err)
+		return 0, err
+	}
+	conn, err := net.DialTCP("tcp", nil, udpAddr)
 	if err != nil {
 		log.Printf("Uh oh! %s", err)
 		return 0, err
