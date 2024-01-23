@@ -227,6 +227,6 @@ func wrapLogger(logger *zap.Logger) *zap.Logger {
 		zap.Int("_pid", os.Getpid()),
 		zap.String("_file", path.Base(os.Args[0])),
 		zap.String("_appversion", MyViper.GetString("project.version")),
-		zap.String("host", MyViper.GetString("project.name")),
+		zap.String("project", MyViper.GetString("project.name")),
 	)
 }
