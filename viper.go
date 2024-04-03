@@ -1,8 +1,8 @@
 package scikits
 
 import (
-	"flag"
 	"fmt"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
@@ -17,8 +17,8 @@ const (
 )
 
 func init() {
-	flag.StringVar(&MyViperConfig, "c", "", "choose config file.")
-	flag.Parse()
+	pflag.StringVar(&MyViperConfig, "c", "", "choose config file.")
+	pflag.Parse()
 
 	if MyViperConfig == "" { // 判断命令行参数是否为空
 		MyViperConfig = defaultFile
