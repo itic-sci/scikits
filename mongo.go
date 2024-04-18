@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+type T any
+
 type MongoClient struct {
 	Label  string // yaml文件中的mongo标签
 	client *mongo.Database
@@ -103,11 +105,29 @@ func (m *MongoClient) MongoJudgeExist(colName string, filter bson.M) bool {
 	}
 }
 
-func (m *MongoClient) MongoFindOneLoadStruct(colName string, filter bson.M, model interface{}) error {
+func (m *MongoClient) MongoFindOneLoadStruct(colName string, filter bson.M, model *T, opts ...*options.FindOneOptions) error {
 	collection := m.client.Collection(colName)
-	singleResult := collection.FindOne(context.TODO(), filter)
+	singleResult := collection.FindOne(context.TODO(), filter, opts...)
 	err := singleResult.Decode(model)
 	return err
+}
+
+func (m *MongoClient) MongoFindListLoadStruct(colName string, filter bson.M, models *[]T, opts ...*options.FindOptions) error {
+	collection := m.client.Collection(colName)
+	cursor, err := collection.Find(context.TODO(), filter, opts...)
+	if err != nil {
+		return err
+	}
+	defer cursor.Close(context.Background())
+	for cursor.Next(context.Background()) {
+		var model T
+		err := cursor.Decode(&model)
+		if err != nil {
+			return err
+		}
+		*models = append(*models, model)
+	}
+	return nil
 }
 
 func (m *MongoClient) MongoFindAll(colName string, filter bson.M, opts ...*options.FindOptions) []map[string]interface{} {
