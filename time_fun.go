@@ -57,6 +57,6 @@ func GetTimeBeforeDay(day int) time.Time {
 // 后几天
 func GetTimeAfterDay(day int) time.Time {
 	nowTime := time.Now()
-	oldTime := nowTime.AddDate(0, 0, -day)
+	oldTime := nowTime.AddDate(0, 0, day)
 	return oldTime
 }
