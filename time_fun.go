@@ -43,7 +43,19 @@ func TimeToStr(timeVal time.Time) string {
 	return timeVal.Format("2006-01-02 15:04:05")
 }
 
+func TimeToStrDate(timeVal time.Time) string {
+	return timeVal.Format("2006-01-02")
+}
+
+// 前几天
 func GetTimeBeforeDay(day int) time.Time {
+	nowTime := time.Now()
+	oldTime := nowTime.AddDate(0, 0, -day)
+	return oldTime
+}
+
+// 后几天
+func GetTimeAfterDay(day int) time.Time {
 	nowTime := time.Now()
 	oldTime := nowTime.AddDate(0, 0, -day)
 	return oldTime
