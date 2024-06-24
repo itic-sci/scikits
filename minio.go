@@ -39,7 +39,7 @@ func (m *MyMinIo) GetMinioClient() *minio.Client {
 	return m.minioClient
 }
 
-func (m *MyMinIo) CreateBucket(bucketName string) {
+func (m *MyMinIo) CreateBucket(bucketName string) error {
 	// bucketName 创建存储桶的名称
 
 	// Location is an optional argument, by default all buckets are created in US Standard Region.
@@ -50,15 +50,17 @@ func (m *MyMinIo) CreateBucket(bucketName string) {
 		// 检查存储桶是否已经存在。
 		exists, err := m.minioClient.BucketExists(bucketName)
 		if err == nil && exists {
-			log.Printf("We already own %s\n", bucketName)
+			SugarLogger.Info("bucketName has exists", bucketName)
 		} else {
-			log.Fatalln(err)
+			SugarLogger.Error(err)
 		}
+		return err
 	}
-	log.Printf("Successfully created %s\n", bucketName)
+	SugarLogger.Info("Successfully created %s\n", bucketName)
+	return err
 }
 
-func (m *MyMinIo) UploadFile(bucketName, filePath, objectName string, opts minio.PutObjectOptions) {
+func (m *MyMinIo) UploadFile(bucketName, filePath, objectName string, opts minio.PutObjectOptions) error {
 	// filePath 要上传文件在磁盘的路径; objectName 上传后文件的名称
 
 	// 使用FPutObject上传一个zip文件。
@@ -67,22 +69,15 @@ func (m *MyMinIo) UploadFile(bucketName, filePath, objectName string, opts minio
 
 	// 保留文件原格式
 	//opts := minio.PutObjectOptions{}
-
 	n, err := m.minioClient.FPutObject(bucketName, objectName, filePath, opts)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	log.Printf("Successfully uploaded %s of size %d\n", objectName, n)
+	SugarLogger.Info("Successfully uploaded %s of size %d\n", objectName, n)
+	return err
 }
 
 // 获取文件的公开访问链接
 func (m *MyMinIo) FileUrlPublic(bucketName, myObject string, expirationSecond time.Duration) (*url.URL, error) {
-
 	presignedURL, err := m.minioClient.PresignedGetObject(bucketName, myObject, time.Second*expirationSecond, nil)
-
-	fmt.Println(presignedURL)
-
+	//fmt.Println(presignedURL)
 	return presignedURL, err
 
 }
